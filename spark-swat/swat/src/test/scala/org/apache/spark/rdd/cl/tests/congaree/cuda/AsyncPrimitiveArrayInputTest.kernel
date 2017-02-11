@@ -1,0 +1,80 @@
+
+static __device__ void *alloc(void *heap, volatile unsigned *free_index, unsigned int heap_size, int nbytes, int *alloc_failed) {
+   unsigned char *cheap = (unsigned char *)heap;
+   unsigned rounded = nbytes + (8 - (nbytes % 8));
+   unsigned offset = atomicAdd((unsigned int *)free_index, rounded);
+   if (offset + nbytes > heap_size) { *alloc_failed = 1; return 0x0; }
+   else return (void *)(cheap + offset);
+}
+template<typename T>
+inline T *dense_vec_fill(T *alloc, double *vals, unsigned size, unsigned tiling) {
+    alloc->values = vals;
+    alloc->size = size;
+    alloc->tiling = tiling;
+    return alloc;
+}
+template<typename T>
+inline T *sparse_vec_fill(T *alloc, double *vals, int *indices, unsigned size, unsigned tiling) {
+    alloc->values = vals;
+    alloc->indices = indices;
+    alloc->size = size;
+    alloc->tiling = tiling;
+    return alloc;
+}
+typedef struct scala_Array_s scala_Array;
+typedef struct org_apache_spark_rdd_cl_tests_AsyncPrimitiveArrayInputTest__s org_apache_spark_rdd_cl_tests_AsyncPrimitiveArrayInputTest_;
+
+struct scala_Array_s{
+   double*  values;
+   int  size;
+   int  tiling;
+   
+};
+
+
+struct org_apache_spark_rdd_cl_tests_AsyncPrimitiveArrayInputTest__s{
+   
+};
+
+typedef struct This_s{
+   double* arr_1;
+   int arr_1__javaArrayLength;
+   } This;
+
+static int scala_Array__size(scala_Array *this_ptr) {
+    return (this_ptr->size);
+}
+
+
+
+static double scala_Array__apply(scala_Array *this_ptr, int index) {
+    return (this_ptr->values)[this_ptr->tiling * index];
+}
+
+
+static double org_apache_spark_rdd_cl_tests_AsyncPrimitiveArrayInputTest__anon_1__apply_mcD_sp(This *this_ptr){
+
+   
+   double sum = 0.0;
+   int i = 0;
+   for (; i<this_ptr->arr_1__javaArrayLength; i = i + 1){
+   
+      sum = sum + this_ptr->arr_1[i];
+   }
+   return sum;;
+}
+static double org_apache_spark_rdd_cl_tests_AsyncPrimitiveArrayInputTest__anon_1__apply(This *this_ptr){
+
+   return(org_apache_spark_rdd_cl_tests_AsyncPrimitiveArrayInputTest__anon_1__apply_mcD_sp(this_ptr));
+}
+extern "C" __global__ void run(
+      double * arr_1, int * arr_1_sizes, int * arr_1_offsets, int narr_1, 
+      double* out, int N, int iter) {
+   This thisStruct;
+   This* this_ptr=&thisStruct;
+   for (int i = (blockIdx.x * blockDim.x + threadIdx.x); i < N; i += (gridDim.x * blockDim.x)) {
+      this_ptr->arr_1 = arr_1 + arr_1_offsets[i]; this_ptr->arr_1__javaArrayLength = arr_1_sizes[i];
+      out[i] = org_apache_spark_rdd_cl_tests_AsyncPrimitiveArrayInputTest__anon_1__apply(this_ptr);
+      
+   }
+}

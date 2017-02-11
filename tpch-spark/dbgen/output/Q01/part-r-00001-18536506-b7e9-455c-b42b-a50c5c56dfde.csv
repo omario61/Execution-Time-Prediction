@@ -1,0 +1,2 @@
+l_returnflag,l_linestatus,sum(l_quantity),sum(l_extendedprice),"sum(UDF(l_extendedprice, l_discount))","sum(UDF(UDF(l_extendedprice, l_discount), l_tax))",avg(l_quantity),avg(l_extendedprice),avg(l_discount),count(l_quantity)
+N,F,991417.0,1.4875047103799999E9,1.4130821680541E9,1.4696492231943748E9,25.516471920522985,38284.4677608483,0.050093426674216374,38854

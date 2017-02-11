@@ -1,0 +1,128 @@
+
+static __device__ void *alloc(void *heap, volatile unsigned *free_index, unsigned int heap_size, int nbytes, int *alloc_failed) {
+   unsigned char *cheap = (unsigned char *)heap;
+   unsigned rounded = nbytes + (8 - (nbytes % 8));
+   unsigned offset = atomicAdd((unsigned int *)free_index, rounded);
+   if (offset + nbytes > heap_size) { *alloc_failed = 1; return 0x0; }
+   else return (void *)(cheap + offset);
+}
+template<typename T>
+inline T *dense_vec_fill(T *alloc, double *vals) {
+    alloc->values = vals;
+    alloc->size = *(((long *)vals) - 1);
+    alloc->tiling = 1;
+    return alloc;
+}
+template<typename T>
+inline T *sparse_vec_fill(T *alloc, double *vals, int *indices, unsigned size, unsigned tiling) {
+    alloc->values = vals;
+    alloc->indices = indices;
+    alloc->size = size;
+    alloc->tiling = tiling;
+    return alloc;
+}
+typedef struct org_apache_spark_rdd_cl_tests_PointWithClassifier_s org_apache_spark_rdd_cl_tests_PointWithClassifier;
+typedef struct scala_Tuple2_I_org_apache_spark_rdd_cl_tests_PointWithClassifier_s scala_Tuple2_I_org_apache_spark_rdd_cl_tests_PointWithClassifier;
+typedef struct org_apache_spark_rdd_cl_tests_KMeansTest__s org_apache_spark_rdd_cl_tests_KMeansTest_;
+
+struct org_apache_spark_rdd_cl_tests_PointWithClassifier_s{
+   float  z;
+   float  y;
+   float  x;
+   
+};
+
+
+struct scala_Tuple2_I_org_apache_spark_rdd_cl_tests_PointWithClassifier_s{
+   org_apache_spark_rdd_cl_tests_PointWithClassifier  * _2;
+   int  _1;
+   
+};
+
+
+struct org_apache_spark_rdd_cl_tests_KMeansTest__s{
+   
+};
+
+typedef struct This_s{
+   scala_Tuple2_I_org_apache_spark_rdd_cl_tests_PointWithClassifier *centers_1;
+   int centers_1__javaArrayLength;
+   } This;
+
+static scala_Tuple2_I_org_apache_spark_rdd_cl_tests_PointWithClassifier* scala_Tuple2_I_org_apache_spark_rdd_cl_tests_PointWithClassifier___init_(void * __swat_heap, unsigned * __swat_free_index, int * __swat_alloc_failed, const int __swat_heap_size, scala_Tuple2_I_org_apache_spark_rdd_cl_tests_PointWithClassifier *this_ptr, int  one, org_apache_spark_rdd_cl_tests_PointWithClassifier *  two) {
+   this_ptr->_1 = one;
+   this_ptr->_2 = two;
+   return this_ptr;
+}
+
+
+static float  org_apache_spark_rdd_cl_tests_PointWithClassifier__z(void * __swat_heap, unsigned * __swat_free_index, int * __swat_alloc_failed, const int __swat_heap_size,  org_apache_spark_rdd_cl_tests_PointWithClassifier *this_ptr){
+   return this_ptr->z;
+}
+static float  org_apache_spark_rdd_cl_tests_PointWithClassifier__y(void * __swat_heap, unsigned * __swat_free_index, int * __swat_alloc_failed, const int __swat_heap_size,  org_apache_spark_rdd_cl_tests_PointWithClassifier *this_ptr){
+   return this_ptr->y;
+}
+static float  org_apache_spark_rdd_cl_tests_PointWithClassifier__x(void * __swat_heap, unsigned * __swat_free_index, int * __swat_alloc_failed, const int __swat_heap_size,  org_apache_spark_rdd_cl_tests_PointWithClassifier *this_ptr){
+   return this_ptr->x;
+}
+static  org_apache_spark_rdd_cl_tests_PointWithClassifier * org_apache_spark_rdd_cl_tests_PointWithClassifier___init_(void * __swat_heap, unsigned * __swat_free_index, int * __swat_alloc_failed, const int __swat_heap_size,  org_apache_spark_rdd_cl_tests_PointWithClassifier *this_ptr, float x, float y, float z){
+
+   this_ptr->x=x;
+   this_ptr->y=y;
+   this_ptr->z=z;
+   ;
+   return (this_ptr);
+}
+static float  org_apache_spark_rdd_cl_tests_PointWithClassifier__dist(void * __swat_heap, unsigned * __swat_free_index, int * __swat_alloc_failed, const int __swat_heap_size,  org_apache_spark_rdd_cl_tests_PointWithClassifier *this_ptr, org_apache_spark_rdd_cl_tests_PointWithClassifier* center){
+
+   
+   float diffx = center->x - this_ptr->x;
+   float diffy = center->y - this_ptr->y;
+   float diffz = center->z - this_ptr->z;
+   return (float)sqrt((double)(((diffx * diffx) + (diffy * diffy)) + (diffz * diffz)));;
+}
+static scala_Tuple2_I_org_apache_spark_rdd_cl_tests_PointWithClassifier *org_apache_spark_rdd_cl_tests_KMeansTest__anon_1__apply(void * __swat_heap, unsigned * __swat_free_index, int * __swat_alloc_failed, const int __swat_heap_size, This *this_ptr, org_apache_spark_rdd_cl_tests_PointWithClassifier* in){
+
+   
+   int closest_center = -1;
+   float closest_center_dist = -1.0f;
+   int i = 0;
+   while (i<this_ptr->centers_1__javaArrayLength){
+   
+      {
+      
+         float d = org_apache_spark_rdd_cl_tests_PointWithClassifier__dist(__swat_heap, __swat_free_index, __swat_alloc_failed, __swat_heap_size, in,  (this_ptr->centers_1[i])._2);
+         if (i==0 || d<closest_center_dist){
+         
+            closest_center = i;
+            closest_center_dist = d;
+         }
+         i = i + 1;
+      }
+   }
+   ;
+   scala_Tuple2_I_org_apache_spark_rdd_cl_tests_PointWithClassifier * __alloc0 = (scala_Tuple2_I_org_apache_spark_rdd_cl_tests_PointWithClassifier *)alloc(__swat_heap, __swat_free_index, __swat_heap_size, sizeof(scala_Tuple2_I_org_apache_spark_rdd_cl_tests_PointWithClassifier), __swat_alloc_failed);
+   if (*__swat_alloc_failed) { return ((scala_Tuple2_I_org_apache_spark_rdd_cl_tests_PointWithClassifier*)0x0); }
+   org_apache_spark_rdd_cl_tests_PointWithClassifier * __alloc1 = (org_apache_spark_rdd_cl_tests_PointWithClassifier *)alloc(__swat_heap, __swat_free_index, __swat_heap_size, sizeof(org_apache_spark_rdd_cl_tests_PointWithClassifier), __swat_alloc_failed);
+   if (*__swat_alloc_failed) { return ((scala_Tuple2_I_org_apache_spark_rdd_cl_tests_PointWithClassifier*)0x0); }
+   return scala_Tuple2_I_org_apache_spark_rdd_cl_tests_PointWithClassifier___init_(__swat_heap, __swat_free_index, __swat_alloc_failed, __swat_heap_size, __alloc0,  (this_ptr->centers_1[closest_center])._1, org_apache_spark_rdd_cl_tests_PointWithClassifier___init_(__swat_heap, __swat_free_index, __swat_alloc_failed, __swat_heap_size, __alloc1,  (this_ptr->centers_1[closest_center])._2->x,  (this_ptr->centers_1[closest_center])._2->y,  (this_ptr->centers_1[closest_center])._2->z));;
+}
+extern "C" __global__ void run(
+      org_apache_spark_rdd_cl_tests_PointWithClassifier* in0, 
+      int * out_1, org_apache_spark_rdd_cl_tests_PointWithClassifier* out_2, int * centers_1_1, org_apache_spark_rdd_cl_tests_PointWithClassifier* centers_1_2, scala_Tuple2_I_org_apache_spark_rdd_cl_tests_PointWithClassifier * centers_1, int centers_1__javaArrayLength, void * heap, unsigned * free_index, unsigned int heap_size, int * processing_succeeded, int N, int iter) {
+   This thisStruct;
+   This* this_ptr=&thisStruct;
+   this_ptr->centers_1 = centers_1; for (int ii = 0; ii < centers_1__javaArrayLength; ii++) { centers_1[ii]._1 = centers_1_1[ii]; centers_1[ii]._2 = centers_1_2 + ii;  } ;
+   this_ptr->centers_1__javaArrayLength = centers_1__javaArrayLength;
+   for (int i = (blockIdx.x * blockDim.x + threadIdx.x); i < N; i += (gridDim.x * blockDim.x)) {
+      if (iter == 0) processing_succeeded[i] = 0;
+      else if (processing_succeeded[i]) continue;
+      int alloc_failed = 0;
+      scala_Tuple2_I_org_apache_spark_rdd_cl_tests_PointWithClassifier* result = org_apache_spark_rdd_cl_tests_KMeansTest__anon_1__apply(heap, free_index, &alloc_failed, heap_size, this_ptr, in0 + i);
+      if (!alloc_failed) {
+         processing_succeeded[i] = 1;
+         out_1[i] = result->_1;
+         out_2[i] = *(result->_2);
+      }
+   }
+}

@@ -1,0 +1,2 @@
+cntrycode,count(c_acctbal),sum(c_acctbal)
+31,922,6806670.179999992

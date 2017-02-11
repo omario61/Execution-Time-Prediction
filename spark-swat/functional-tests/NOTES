@@ -1,0 +1,35 @@
+Connected Components
+====================
+
+Hyperlink Graph dataset:
+http://webdatacommons.org/hyperlinkgraph/
+wget -i http://webdatacommons.org/hyperlinkgraph/2012-08/data/arc.list.txt
+
+Fuzzy CMeans
+============
+
+https://archive.ics.uci.edu/ml/machine-learning-databases/census1990-mld/USCensus1990.data.txt
+
+KMeans
+======
+
+https://archive.ics.uci.edu/ml/machine-learning-databases/census1990-mld/USCensus1990.data.txt
+
+NN
+==
+
+ImageNet: http://image-net.org/challenges/LSVRC/2014/download-images-5jj5.php
+  DET dataset: http://image-net.org/image/ilsvrc2014/ILSVRC2014_DET_train.tar
+  CLS-LOC dataset: http://www.image-net.org/challenges/LSVRC/2012/nonpub/ILSVRC2012_img_train.tar
+
+PageRank
+========
+
+Hyperlink Graph dataset:
+http://webdatacommons.org/hyperlinkgraph/
+wget -i http://webdatacommons.org/hyperlinkgraph/2012-08/data/arc.list.txt
+
+Genetic
+============
+
+https://archive.ics.uci.edu/ml/machine-learning-databases/census1990-mld/USCensus1990.data.txt

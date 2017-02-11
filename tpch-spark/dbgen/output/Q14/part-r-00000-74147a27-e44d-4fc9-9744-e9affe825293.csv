@@ -1,0 +1,2 @@
+"((sum(UDF(p_type, value)) * 100) / sum(value))"
+16.380778626395543

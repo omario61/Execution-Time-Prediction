@@ -1,0 +1,2 @@
+o_year,(sum(case_volume) / sum(volume))
+1995,0.03443589040665479

@@ -1,0 +1,62 @@
+
+static __device__ void *alloc(void *heap, volatile unsigned *free_index, unsigned int heap_size, int nbytes, int *alloc_failed) {
+   unsigned char *cheap = (unsigned char *)heap;
+   unsigned rounded = nbytes + (8 - (nbytes % 8));
+   unsigned offset = atomicAdd((unsigned int *)free_index, rounded);
+   if (offset + nbytes > heap_size) { *alloc_failed = 1; return 0x0; }
+   else return (void *)(cheap + offset);
+}
+template<typename T>
+inline T *dense_vec_fill(T *alloc, double *vals) {
+    alloc->values = vals;
+    alloc->size = *(((long *)vals) - 1);
+    alloc->tiling = 1;
+    return alloc;
+}
+template<typename T>
+inline T *sparse_vec_fill(T *alloc, double *vals, int *indices, unsigned size, unsigned tiling) {
+    alloc->values = vals;
+    alloc->indices = indices;
+    alloc->size = size;
+    alloc->tiling = tiling;
+    return alloc;
+}
+typedef struct org_apache_spark_rdd_cl_tests_ArrayAllocTest__s org_apache_spark_rdd_cl_tests_ArrayAllocTest_;
+
+struct org_apache_spark_rdd_cl_tests_ArrayAllocTest__s{
+   
+};
+
+typedef struct This_s{
+   } This;
+static int  org_apache_spark_rdd_cl_tests_ArrayAllocTest__anon_1__apply_mcII_sp(void * __swat_heap, unsigned * __swat_free_index, int * __swat_alloc_failed, const int __swat_heap_size, This *this_ptr, int in){
+
+   
+   int * __alloc0 = (int *)alloc(__swat_heap, __swat_free_index, __swat_heap_size, sizeof(long) + (sizeof(int) * (5)), __swat_alloc_failed);
+   if (*__swat_alloc_failed) { return ((int)0x0); } *((long *)__alloc0) = (5); __alloc0 = (int *)(((long *)__alloc0) + 1); 
+   int* intArr = __alloc0;
+   double * __alloc1 = (double *)alloc(__swat_heap, __swat_free_index, __swat_heap_size, sizeof(long) + (sizeof(double) * (2)), __swat_alloc_failed);
+   if (*__swat_alloc_failed) { return ((int)0x0); } *((long *)__alloc1) = (2); __alloc1 = (double *)(((long *)__alloc1) + 1); 
+   double* doubleArr = __alloc1;
+   return (in + 3);;
+}
+static int org_apache_spark_rdd_cl_tests_ArrayAllocTest__anon_1__apply(void * __swat_heap, unsigned * __swat_free_index, int * __swat_alloc_failed, const int __swat_heap_size, This *this_ptr, int in){
+
+   return(org_apache_spark_rdd_cl_tests_ArrayAllocTest__anon_1__apply_mcII_sp(__swat_heap, __swat_free_index, __swat_alloc_failed, __swat_heap_size, this_ptr, in));
+}
+extern "C" __global__ void run(
+      int* in0, 
+      int* out, void * heap, unsigned * free_index, unsigned int heap_size, int * processing_succeeded, int N, int iter) {
+   This thisStruct;
+   This* this_ptr=&thisStruct;
+   for (int i = (blockIdx.x * blockDim.x + threadIdx.x); i < N; i += (gridDim.x * blockDim.x)) {
+      if (iter == 0) processing_succeeded[i] = 0;
+      else if (processing_succeeded[i]) continue;
+      int alloc_failed = 0;
+      out[i] = org_apache_spark_rdd_cl_tests_ArrayAllocTest__anon_1__apply(heap, free_index, &alloc_failed, heap_size, this_ptr, in0[i]);
+      if (!alloc_failed) {
+         processing_succeeded[i] = 1;
+         
+      }
+   }
+}
